@@ -83,7 +83,10 @@ CompetitionHarness buildCompetitionHarness(
     ),
   ];
 
-  final container = ProviderContainer(overrides: overrides);
+  final container = ProviderContainer(
+    overrides: overrides,
+    retry: (retryCount, error) => null,
+  );
   final harness = CompetitionHarness(container: container, captured: captured);
   harness._overrides = overrides;
   return harness;

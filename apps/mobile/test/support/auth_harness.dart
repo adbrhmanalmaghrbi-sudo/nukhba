@@ -95,7 +95,10 @@ AuthHarness buildAuthHarness(
     ),
   ];
 
-  final container = ProviderContainer(overrides: overrides);
+  final container = ProviderContainer(
+    overrides: overrides,
+    retry: (retryCount, error) => null,
+  );
   final harness = AuthHarness(
     container: container,
     store: store,

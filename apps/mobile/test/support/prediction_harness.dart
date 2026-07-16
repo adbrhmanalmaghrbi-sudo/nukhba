@@ -89,7 +89,10 @@ PredictionHarness buildPredictionHarness(
     ),
   ];
 
-  final container = ProviderContainer(overrides: overrides);
+  final container = ProviderContainer(
+    overrides: overrides,
+    retry: (retryCount, error) => null,
+  );
   final harness = PredictionHarness(container: container, captured: captured);
   harness._overrides = overrides;
   return harness;

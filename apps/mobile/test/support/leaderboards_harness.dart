@@ -83,7 +83,10 @@ LeaderboardsHarness buildLeaderboardsHarness(
     ),
   ];
 
-  final container = ProviderContainer(overrides: overrides);
+  final container = ProviderContainer(
+    overrides: overrides,
+    retry: (retryCount, error) => null,
+  );
   final harness = LeaderboardsHarness(container: container, captured: captured);
   harness._overrides = overrides;
   return harness;
