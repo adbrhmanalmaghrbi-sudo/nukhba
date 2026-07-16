@@ -1,0 +1,63 @@
+# Workspace root — Dart pub workspaces + Melos 8 configuration.
+#
+# Verified against pub.dev on 2026-07-08:
+#   * Melos >= 7 removed the standalone `melos.yaml`; all Melos configuration
+#     now lives under the `melos:` key in this root pubspec.yaml, and the
+#     workspace uses native Dart pub workspaces (`resolution: workspace` in
+#     every member package). Source: https://melos.invertase.dev/guides/migrations
+#   * Pub workspaces require Dart SDK >= 3.9.0, which is also the floor for
+#     `postgres` 3.5.x and `melos` 8.x.
+name: nukhba_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.9.0
+
+# Dart pub workspaces: every member declares `resolution: workspace`.
+workspace:
+  - packages/shared
+  - packages/domain
+  - packages/contracts
+  - packages/application
+  - packages/infrastructure
+  - packages/api_client
+  - apps/server
+  - apps/mobile
+  - tooling/import_lint
+
+dev_dependencies:
+  melos: ^8.0.0
+
+melos:
+  # `melos analyze` was removed in Melos 7 because `dart analyze` now runs over
+  # the entire pub workspace. We keep an explicit `analyze` script that runs
+  # once at the workspace root for parity with CI.
+  scripts:
+    analyze:
+      description: Analyze the whole workspace with fatal infos/warnings.
+      run: dart analyze --fatal-infos --fatal-warnings .
+
+    format-check:
+      description: Verify formatting across the workspace.
+      run: dart format --output=none --set-exit-if-changed .
+
+    test:
+      description: Run every package that has a test/ directory.
+      exec:
+        command: dart test
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+
+    import-lint:
+      description: >-
+        Enforce Clean Architecture dependency rules (Coding Standards s1).
+      run: dart run tooling/import_lint/bin/import_lint.dart
+
+    verify:
+      description: Full local gate mirroring CI.
+      run: >-
+        melos run format-check &&
+        melos run analyze &&
+        melos run import-lint &&
+        melos run test

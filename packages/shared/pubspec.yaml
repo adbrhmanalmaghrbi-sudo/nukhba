@@ -1,0 +1,14 @@
+name: shared
+description: Dependency-free cross-cutting primitives (Result, errors, ids).
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+# INTENTIONALLY no dependencies. shared is the innermost leaf (Coding Standards s1).
+
+dev_dependencies:
+  test: ^1.26.0
+  lints: ^6.0.0

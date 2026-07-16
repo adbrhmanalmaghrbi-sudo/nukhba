@@ -1,0 +1,27 @@
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+coverage/
+*.g.dart.lock
+.fvm/flutter_sdk
+
+# Riverpod / build_runner generated glue (apps/mobile). Machine-produced by
+# `dart run build_runner build`; regenerated on the build machine, never
+# hand-maintained (and excluded from analysis via apps/mobile/analysis_options.yaml).
+*.g.dart
+
+# Melos / pub workspaces: local dependency link files are generated and must
+# never be committed (Melos migration guide).
+pubspec_overrides.yaml
+
+# Env & secrets (Security ADR s7: never commit the service role)
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store

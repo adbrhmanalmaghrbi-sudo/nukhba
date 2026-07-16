@@ -1,0 +1,84 @@
+name: mobile
+description: >-
+  Nukhba Platform Flutter client (PWA + Android + iOS from one responsive
+  codebase — Flutter App phase decision #2). Core scope v1: Auth, Competition
+  (browse), Prediction (submit), Leaderboards (view). All networking goes
+  through the ratified `api_client` use-case API over `apps/server`; the client
+  never writes directly to any Tier-1 Supabase table (ADR-002 §2.2/§2.8).
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+# Verified against pub.dev on 2026-07-14 (Flutter App phase, project-context §3),
+# all compatible with the ratified Flutter pin 3.44.0 (.fvmrc) / Dart ^3.9.0:
+#   * flutter_riverpod 3.3.2   — ratified state management (decision #3), 3.x stable.
+#   * riverpod_annotation 4.0.3 — the @riverpod annotation surface.
+#   * riverpod_generator 4.0.4  — build_runner generator (produces *.g.dart glue).
+#   * riverpod_lint 3.1.4 + custom_lint 0.8.1 — Riverpod analyzer best-practice rules.
+#   * build_runner 2.15.2       — runs the generator.
+#   * flutter_secure_storage 10.3.1 — persists the Supabase access token off-tree.
+#   * flutter_lints 6.0.0       — Flutter analyzer ruleset, parity with `lints ^6.0.0`.
+#
+# Dependency boundary (ADR-002 §2.8, enforced by tooling/import_lint):
+#   mobile -> {api_client, contracts, shared}. NO domain / application /
+#   infrastructure / server. The app performs NO HTTP itself — `api_client`
+#   owns transport + DTO (de)serialization; the app only orchestrates state/UI.
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Internal packages (read-only, per the import_lint boundary above).
+  api_client:
+  contracts:
+  shared:
+
+  # `http.Client` is required ONLY to construct the `api_client` transport
+  # (`ApiTransport({required http.Client httpClient})`). The app performs NO
+  # HTTP itself: this dependency is confined to exactly one file
+  # (`lib/core/network/http_client.dart`) that constructs the platform default
+  # `http.Client()` and hands it to `api_client`, which owns every request.
+  # Pinned to the same `^1.6.0` `api_client` already verified in §3.
+  http: ^1.6.0
+
+  # State management — ratified Riverpod (annotation-based).
+  flutter_riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+
+  # The Supabase access token lives off the widget tree in platform-secure
+  # storage (keychain/keystore on mobile, WebCrypto-backed on web).
+  flutter_secure_storage: ^10.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Riverpod code generation.
+  # NOTE (build-verification fix, 2026-07-14): build_runner 2.15.2 raised its
+  # floor to analyzer >=13.3.0, but riverpod_generator 4.0.4 pins analyzer
+  # ^12.0.0 — the two cannot resolve together. build_runner 2.15.1 accepts
+  # analyzer >=8 <14 (so analyzer 12 is fine), so pin below 2.15.2 until
+  # riverpod_generator adopts analyzer ^13.
+  build_runner: ">=2.14.0 <2.15.2"
+  riverpod_generator: ^4.0.4
+
+  # Lints.
+  flutter_lints: ^6.0.0
+  # NOTE (build-verification fix, 2026-07-14): custom_lint / riverpod_lint are
+  # TEMPORARILY removed. They are dev-only *semantic* lint helpers (not needed
+  # to compile, analyze, test, or ship the app). At the ratified Flutter pin
+  # (3.44.0 / Dart 3.12), the whole Riverpod 4.x code-gen stack
+  # (riverpod_generator 4.0.4, riverpod_lint 3.1.4) requires analyzer ^12.0.0,
+  # but the newest custom_lint (0.8.1) is still pinned to analyzer ^8.0.0 —
+  # there is NO version combination in which custom_lint co-exists with
+  # Riverpod 4.x. Since custom_lint is what hosts riverpod_lint's rules, both
+  # are dropped until custom_lint adopts analyzer ^9+. `flutter_lints`
+  # (the analyzer-native ruleset in analysis_options.yaml) is unaffected and
+  # keeps running. Re-add both, and restore the `custom_lint` plugin line in
+  # apps/mobile/analysis_options.yaml, once custom_lint catches up.
+
+flutter:
+  uses-material-design: true

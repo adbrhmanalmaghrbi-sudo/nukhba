@@ -1,0 +1,31 @@
+name: server
+description: Nukhba backend (Dart Frog). Composition root + HTTP routes.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  application: any
+  contracts: any
+  domain: any
+  infrastructure: any
+  shared: any
+  # Verified on pub.dev 2026-07-08: dart_frog 1.2.6 (SDK >=3.0.0 <4.0.0).
+  dart_frog: ^1.2.0
+  # `@visibleForTesting` on CompositionRoot.forTesting lives in lib/, so `meta`
+  # is a direct runtime-visible dependency (annotations resolve at analysis
+  # time). Declared explicitly rather than relying on a transitive pull-in.
+  meta: ^1.15.0
+
+dev_dependencies:
+  # NOTE: `dart_frog_gen` is intentionally NOT declared here. It is a build-time
+  # dependency consumed by `dart_frog_cli` during `dart_frog build`; the CLI
+  # resolves it itself. No source file imports it, so pinning it here would only
+  # risk a version conflict with the CLI (gen is at 2.x while dart_frog is 1.x).
+  http: ^1.2.0
+  mocktail: ^1.0.0
+  test: ^1.26.0
+  lints: ^6.0.0

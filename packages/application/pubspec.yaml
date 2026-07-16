@@ -1,0 +1,16 @@
+name: application
+description: Use-cases and repository ports. Depends on domain + shared only.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  domain: any
+  shared: any
+
+dev_dependencies:
+  test: ^1.26.0
+  lints: ^6.0.0

@@ -1,0 +1,33 @@
+# Strictest sensible lint set for the whole workspace.
+#
+# Verified against pub.dev on 2026-07-08: `lints` 6.x ships
+# `package:lints/recommended.yaml`. The removed lint
+# `avoid_returning_null_for_future` (obsolete under sound null safety) is NOT
+# listed here — including it would raise a "removed lint" warning under the
+# current analyzer.
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Architectural discipline: treat these as errors, not hints.
+    always_declare_return_types: error
+    prefer_final_locals: error
+    unawaited_futures: error
+    avoid_dynamic_calls: error
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+linter:
+  rules:
+    - avoid_print
+    - prefer_const_constructors
+    - prefer_final_fields
+    - require_trailing_commas
+    - always_use_package_imports
+    - directives_ordering
+    - unnecessary_lambdas

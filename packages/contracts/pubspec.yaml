@@ -1,0 +1,14 @@
+name: contracts
+description: Versioned API DTOs shared between client and server. Pure data.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+# Contracts depend on nothing (API ADR, Section 4). Pure serializable data.
+
+dev_dependencies:
+  test: ^1.26.0
+  lints: ^6.0.0

@@ -1,0 +1,33 @@
+name: api_client
+description: >-
+  Thin, typed HTTP transport that (de)serializes the versioned `contracts` DTOs
+  against the `apps/server` use-case API. No business logic, no state
+  management, no UI. Importable from Flutter and from any Dart program.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+# Verified against pub.dev on 2026-07-13 (Flutter App phase, §3):
+#   * `http` 1.6.0 — the stable multi-platform Client interface (IOClient on
+#     native, BrowserClient on web), plus `package:http/testing.dart`'s
+#     MockClient for hermetic transport tests. Min Dart SDK 3.4 (below our
+#     ^3.9.0 floor). Source: https://pub.dev/packages/http
+#
+# Dependency boundary (ADR-002 §2.8, enforced by tooling/import_lint):
+#   api_client -> {contracts, shared}. It carries the versioned DTOs
+#   (`contracts`) over the wire and reports failures as the project-wide typed
+#   `Result`/`AppError` (`shared`). It deliberately does NOT depend on
+#   `domain`, `application`, or `infrastructure`: no domain rule, no use-case,
+#   no repository ever leaks to the client (the client only speaks the HTTP
+#   contract).
+dependencies:
+  contracts:
+  http: ^1.6.0
+  shared:
+
+dev_dependencies:
+  test: ^1.26.0
+  lints: ^6.0.0

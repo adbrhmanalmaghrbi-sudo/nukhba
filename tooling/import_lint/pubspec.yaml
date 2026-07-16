@@ -1,0 +1,21 @@
+name: import_lint
+description: >-
+  Workspace tooling that enforces the Clean Architecture dependency rules
+  (Coding Standards ADR, Section 1). Scans every package's Dart sources and
+  fails if a layer imports a package it is forbidden to depend on.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  # Only the Dart SDK + core libraries are needed; the linter walks the file
+  # system and parses import directives with a regexp, so it deliberately has
+  # no third-party dependencies (keeps the tooling package trivially buildable).
+  path: ^1.9.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.0

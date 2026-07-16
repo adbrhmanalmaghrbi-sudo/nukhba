@@ -1,0 +1,42 @@
+name: infrastructure
+description: Adapters implementing application ports (Postgres, etc.).
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  application: any
+  domain: any
+  shared: any
+  # Verified on pub.dev 2026-07-08: postgres 3.5.12 (needs Dart SDK ^3.9.0).
+  # API confirmed: Pool.withEndpoints(List<Endpoint>, {PoolSettings? settings}),
+  # PoolSettings({int? maxConnectionCount, SslMode? sslMode, ...}), SslMode.
+  # Parameterized queries via Sql.named(...) + ResultRow.toColumnMap() (3.5.x).
+  postgres: ^3.5.0
+  # Verified on pub.dev 2026-07-09: dart_jsonwebtoken 2.17.0.
+  # API confirmed (re-checked against the resolved 2.17.0 source on 2026-07-15):
+  # JWT.decode(token).header (alg/kid), JWT.verify(token, key, {audience:
+  # Audience, issuer, subject}), SecretKey(String) for HS256, typed exceptions
+  # JWTExpiredException / JWTInvalidException / JWTParseException / JWTException.
+  # CORRECTION: 2.17.0 has NO `JWTKey.fromJWK`; its `ECPublicKey` builds only
+  # from PEM/bytes/raw. So an ES256 JWK is materialized here via PointyCastle
+  # (`ECPublicKey.raw(pc.ECPublicKey(Q, ECDomainParameters('prime256v1')))`).
+  dart_jsonwebtoken: ^2.17.0
+  # PointyCastle backs the JWK->ECPublicKey conversion for ES256 (P-256).
+  # Verified present at 3.9.1 (transitive of dart_jsonwebtoken); declared
+  # explicitly because we import `package:pointycastle/...` directly.
+  pointycastle: ^3.9.1
+  # Verified on pub.dev 2026-07-09: http 1.2.x. Used for the JWKS fetch.
+  http: ^1.2.0
+  # Verified on pub.dev 2026-07-09: uuid 4.5.3 (needs Dart SDK ^3.x). API
+  # confirmed: `const Uuid()` + `Uuid().v4()` -> canonical hyphenated RFC-4122
+  # v4 string, cryptographically strong RNG on all platforms. Backs
+  # UuidIdGenerator (the IdGenerator port impl for server-created aggregate ids).
+  uuid: ^4.5.3
+
+dev_dependencies:
+  test: ^1.26.0
+  lints: ^6.0.0
