@@ -100,9 +100,7 @@ void main() {
             .read(sessionControllerProvider.notifier)
             .signIn('fresh-jwt');
 
-        final state = harness.container
-            .read(sessionControllerProvider)
-            .value;
+        final state = harness.container.read(sessionControllerProvider).value;
         expect(state, const SessionAuthenticated(sampleUser));
         expect(
           await harness.store.read(),
@@ -129,9 +127,7 @@ void main() {
           .read(sessionControllerProvider.notifier)
           .signIn('bogus-jwt');
 
-      final state = harness.container
-          .read(sessionControllerProvider)
-          .value;
+      final state = harness.container.read(sessionControllerProvider).value;
       expect(state, isA<SessionFailed>());
       final error = (state as SessionFailed).error;
       expect(error.kind, ErrorKind.authorization);
@@ -151,9 +147,7 @@ void main() {
           .read(sessionControllerProvider.notifier)
           .signIn('good-but-offline-jwt');
 
-      final state = harness.container
-          .read(sessionControllerProvider)
-          .value;
+      final state = harness.container.read(sessionControllerProvider).value;
       expect(state, isA<SessionFailed>());
       final error = (state as SessionFailed).error;
       expect(error.kind, ErrorKind.transient);
@@ -176,9 +170,7 @@ void main() {
             .read(sessionControllerProvider.notifier)
             .signIn('   ');
 
-        final state = harness.container
-            .read(sessionControllerProvider)
-            .value;
+        final state = harness.container.read(sessionControllerProvider).value;
         expect(state, isA<SessionFailed>());
         expect((state as SessionFailed).error.kind, ErrorKind.validation);
         expect(harness.captured, isEmpty);
