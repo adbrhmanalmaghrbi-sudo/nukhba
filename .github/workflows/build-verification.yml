@@ -23,6 +23,7 @@ jobs:
         working-directory: apps/mobile
         run: flutter pub get
 
+
       - name: Generate code (build_runner)
         working-directory: apps/mobile
         run: dart run build_runner build --delete-conflicting-outputs
@@ -54,6 +55,7 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
+
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
@@ -91,6 +93,10 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
+      - name: Ensure platform folders exist
+        working-directory: apps/mobile
+        run: flutter create --platforms=android,web . --project-name nukhba
+
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
@@ -122,6 +128,10 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
+      - name: Ensure platform folders exist
+        working-directory: apps/mobile
+        run: flutter create --platforms=android,web . --project-name nukhba
+
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
