@@ -7,6 +7,12 @@
 /// the resolved value and the outbound method+path, and that a failure surfaces
 /// as a typed [AppError] off the provider's future (thrown, so the UI sees
 /// `AsyncError`).
+///
+/// Every read keeps an explicit `container.listen` subscription alive across
+/// the awaited `.future` — an autoDispose FutureProvider has no guaranteed
+/// keep-alive from `container.read(provider.future)` alone, and the error
+/// path (which takes one extra microtask to build `AsyncError`) can lose the
+/// race against the autoDispose scheduler without it.
 library;
 
 import 'package:contracts/contracts.dart';
@@ -23,6 +29,12 @@ void main() {
         (_) async => okJsonObject(sampleBoard.toJson()),
       );
       addTearDown(harness.dispose);
+
+      final sub = harness.container.listen(
+        seasonLeaderboardProvider('s-1'),
+        (_, _) {},
+      );
+      addTearDown(sub.close);
 
       final board = await harness.container.read(
         seasonLeaderboardProvider('s-1').future,
@@ -52,6 +64,12 @@ void main() {
       );
       addTearDown(harness.dispose);
 
+      final sub = harness.container.listen(
+        seasonLeaderboardProvider('s-2'),
+        (_, _) {},
+      );
+      addTearDown(sub.close);
+
       final board = await harness.container.read(
         seasonLeaderboardProvider('s-2').future,
       );
@@ -70,6 +88,12 @@ void main() {
         ),
       );
       addTearDown(harness.dispose);
+
+      final sub = harness.container.listen(
+        seasonLeaderboardProvider('s-1'),
+        (_, _) {},
+      );
+      addTearDown(sub.close);
 
       await expectLater(
         harness.container.read(seasonLeaderboardProvider('s-1').future),
@@ -91,6 +115,12 @@ void main() {
       );
       addTearDown(harness.dispose);
 
+      final sub = harness.container.listen(
+        seasonLeaderboardProvider('not-a-uuid'),
+        (_, _) {},
+      );
+      addTearDown(sub.close);
+
       await expectLater(
         harness.container.read(seasonLeaderboardProvider('not-a-uuid').future),
         throwsA(
@@ -104,6 +134,12 @@ void main() {
         (_) async => throw Exception('socket reset'),
       );
       addTearDown(harness.dispose);
+
+      final sub = harness.container.listen(
+        seasonLeaderboardProvider('s-1'),
+        (_, _) {},
+      );
+      addTearDown(sub.close);
 
       await expectLater(
         harness.container.read(seasonLeaderboardProvider('s-1').future),
@@ -124,6 +160,12 @@ void main() {
           ),
         );
         addTearDown(harness.dispose);
+
+        final sub = harness.container.listen(
+          seasonLeaderboardProvider('s-1'),
+          (_, _) {},
+        );
+        addTearDown(sub.close);
 
         await expectLater(
           harness.container.read(seasonLeaderboardProvider('s-1').future),
