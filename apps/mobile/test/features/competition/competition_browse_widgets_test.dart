@@ -19,6 +19,7 @@ import '../../support/competition_harness.dart';
 
 Widget _host(CompetitionHarness harness, Widget child) => ProviderScope(
   overrides: harness.overrides,
+  retry: (retryCount, error) => null,
   child: MaterialApp(home: child),
 );
 

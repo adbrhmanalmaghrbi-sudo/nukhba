@@ -31,6 +31,7 @@ http.Response _okEmptyList() => http.Response(
 
 Widget _host(LeaderboardsHarness harness, Widget child) => ProviderScope(
   overrides: harness.overrides,
+  retry: (retryCount, error) => null,
   child: MaterialApp(home: child),
 );
 
