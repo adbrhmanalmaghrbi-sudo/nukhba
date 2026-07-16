@@ -27,6 +27,10 @@ jobs:
         working-directory: apps/mobile
         run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Auto-fix lint issues
+        working-directory: apps/mobile
+        run: dart fix --apply
+
       - name: Verify formatting
         working-directory: apps/mobile
         run: dart format --output=none --set-exit-if-changed .
