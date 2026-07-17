@@ -1,12 +1,10 @@
-FROM dart:3.9 AS build
+FROM ghcr.io/cirruslabs/flutter:stable AS build
 
 WORKDIR /app
 COPY . .
 
-# Resolve the whole pub workspace once from the root.
-RUN dart pub get
+RUN flutter pub get
 
-# Activate Dart Frog CLI and build the server package.
 RUN dart pub global activate dart_frog_cli
 ENV PATH="$PATH:/root/.pub-cache/bin"
 
