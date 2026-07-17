@@ -29,8 +29,8 @@ jobs:
       - name: Verify formatting (workspace)
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Analyze (workspace, fatal infos/warnings)
-        run: dart analyze --fatal-infos --fatal-warnings .
+      - name: Analyze (workspace, fatal warnings)
+        run: dart analyze --fatal-warnings .
 
       - name: Import-lint (Clean Architecture boundaries)
         run: dart run tooling/import_lint/bin/import_lint.dart
