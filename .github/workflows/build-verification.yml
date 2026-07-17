@@ -23,7 +23,6 @@ jobs:
         working-directory: apps/mobile
         run: flutter pub get
 
-
       - name: Generate code (build_runner)
         working-directory: apps/mobile
         run: dart run build_runner build --delete-conflicting-outputs
@@ -55,7 +54,6 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
-
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
@@ -93,10 +91,6 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
-      - name: Ensure platform folders exist
-        working-directory: apps/mobile
-        run: flutter create --platforms=android,web . --project-name nukhba
-
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
@@ -104,7 +98,7 @@ jobs:
 
       - name: Build APK
         working-directory: apps/mobile
-        run: flutter build apk --release
+        run: flutter build apk --release --dart-define=NUKHBA_API_BASE_URL=https://nukhba-production.up.railway.app
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -128,10 +122,6 @@ jobs:
       - name: Install dependencies
         working-directory: apps/mobile
         run: flutter pub get
-      - name: Ensure platform folders exist
-        working-directory: apps/mobile
-        run: flutter create --platforms=android,web . --project-name nukhba
-
 
       - name: Generate code (build_runner)
         working-directory: apps/mobile
@@ -139,7 +129,7 @@ jobs:
 
       - name: Build web
         working-directory: apps/mobile
-        run: flutter build web --release
+        run: flutter build web --release --dart-define=NUKHBA_API_BASE_URL=https://nukhba-production.up.railway.app
 
       - name: Upload web build artifact
         uses: actions/upload-artifact@v4
