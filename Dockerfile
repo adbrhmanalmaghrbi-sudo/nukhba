@@ -19,7 +19,6 @@ FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/apps/server/build/server /app/server
-COPY --from=build /app/apps/server/build/public /app/public
 
 ENV PORT=8080
 EXPOSE 8080
