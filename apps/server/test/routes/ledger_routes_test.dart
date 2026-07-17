@@ -80,6 +80,7 @@ void main() {
         participantId:
             (ParticipantId.tryParse(participantId) as Ok<ParticipantId>).value,
         rulesetVersion: 1,
+        totalPoints: total,
         fixtureResults: [
           FixtureScoreResult(
             fixture: (FixtureRef.tryParse(kFixtureId) as Ok<FixtureRef>).value,
