@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:application/application.dart';
 import 'package:domain/domain.dart';
 import 'package:infrastructure/src/db/postgres_connection.dart';
