@@ -14,7 +14,7 @@ import 'package:shared/shared.dart';
 /// Every method can also be forced to return a scripted transient failure via
 /// [failNextWith], letting a test assert the use-case propagates infrastructure
 /// faults unchanged.
-final class FakeCompetitionRepository implements CompetitionRepository {
+base class FakeCompetitionRepository implements CompetitionRepository {
   final Map<String, Competition> _competitions = {};
   final Map<String, CompetitionSeason> _seasons = {};
   final Map<String, Round> _rounds = {};
