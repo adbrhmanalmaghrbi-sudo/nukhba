@@ -58,7 +58,7 @@ void main() {
     test('distinct id types with the same value are not equal', () {
       const a = CompetitionId(_validUuid);
       const b = SeasonId(_validUuid);
-      expect(a, isNot<Object>(b));
+      expect(a, isNot(b));
     });
   });
 
