@@ -90,6 +90,10 @@ jobs:
 
       - name: Install dependencies
         working-directory: apps/mobile
+      - name: Ensure platform folders exist
+        working-directory: apps/mobile
+        run: flutter create --platforms=android,web . --project-name nukhba
+
         run: flutter pub get
 
       - name: Generate code (build_runner)
@@ -117,6 +121,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - name: Ensure platform folders exist
+        working-directory: apps/mobile
+        run: flutter create --platforms=android,web . --project-name nukhba
+
           cache: true
 
       - name: Install dependencies
