@@ -1,0 +1,6 @@
+apps/mobile
+.git
+.github
+docs
+build
+.dart_tool
