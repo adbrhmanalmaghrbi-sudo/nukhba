@@ -44,7 +44,7 @@ Future<Response> onRequest(RequestContext context, String id) async {
     // The rotation already proved the caller is the owner (a member), so shape
     // the response with the group's real member count via the member-gated
     // read; the just-rotated value is the source of truth for the new code.
-    Ok<Group>() => _reReadForCount(root, principal, id, result as Ok<Group>),
+    Ok<Group>() => _reReadForCount(root, principal, id, result),
     Err<Group>(:final error) => errorResponse(error),
   };
 }

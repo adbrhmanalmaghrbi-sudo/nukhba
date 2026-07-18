@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:application/application.dart';
-import 'package:domain/domain.dart';
 import 'package:server/composition/composition_root.dart';
 import 'package:shared/shared.dart';
 import 'package:test/test.dart';

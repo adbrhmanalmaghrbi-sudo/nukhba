@@ -2,7 +2,6 @@ import 'package:domain/src/competition/round_id.dart';
 import 'package:domain/src/group/group_id.dart';
 import 'package:domain/src/identity/user_id.dart';
 import 'package:domain/src/notification/notification_kind.dart';
-import 'package:shared/shared.dart';
 
 /// The bounded, **kind-discriminated reference payload** of a [Notification]
 /// (Notifications decision #1/#3): the type-specific ids a client needs to
