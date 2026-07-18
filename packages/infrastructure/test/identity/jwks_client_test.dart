@@ -56,6 +56,8 @@ void main() {
           final kids = fetches == 1 ? ['k1'] : ['k1', 'k2'];
           return http.Response(_jwksBody(kids), 200);
         }),
+        // Allow the forced refresh to run without rate-limiting.
+        minRefreshInterval: Duration.zero,
       );
 
       final miss = await client.keyForKid('k2');
