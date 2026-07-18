@@ -262,8 +262,18 @@ void main() {
       return (root: root, ledger: ledger);
     }
 
-    /// A round_score credit for [participantId] worth [amount], stamped now.
-    PointEntry credit(String entryId, String participantId, int amount) =>
+    /// A round_score credit for [participantId] worth [amount], stamped now,
+    /// for round [roundIdStr] (defaults to the harness's [kRoundId]). Pass a
+    /// distinct [roundIdStr] when seeding more than one credit for the same
+    /// participant — a round_score entry is unique per (participant, round),
+    /// so two credits for the same round would dedupe to one (a re-post), not
+    /// add up.
+    PointEntry credit(
+      String entryId,
+      String participantId,
+      int amount, {
+      String roundIdStr = kRoundId,
+    }) =>
         (PointEntry.create(
                   id: (PointEntryId.tryParse(entryId) as Ok<PointEntryId>)
                       .value,
@@ -271,10 +281,10 @@ void main() {
                       (ParticipantId.tryParse(participantId)
                               as Ok<ParticipantId>)
                           .value,
-                  roundId: roundId,
+                  roundId: (RoundId.tryParse(roundIdStr) as Ok<RoundId>).value,
                   kind: EntryKind.roundScore,
                   amount: amount,
-                  sourceRef: 'round_score:$kRoundId:$participantId',
+                  sourceRef: 'round_score:$roundIdStr:$participantId',
                   occurredAt: _at,
                 )
                 as Ok<PointEntry>)
@@ -293,7 +303,7 @@ void main() {
       final setup = await rootFor(
         entries: [
           credit(kEntryId1, kParticipantId, 4),
-          credit(kEntryId2, kParticipantId, 3),
+          credit(kEntryId2, kParticipantId, 3, roundIdStr: kRoundId2),
         ],
       );
 
