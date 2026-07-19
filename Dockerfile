@@ -6,8 +6,8 @@ FROM ghcr.io/cirruslabs/flutter:stable AS build
 WORKDIR /app
 COPY . .
 
-# 1. Dependencies للـmonorepo
-RUN cd apps/mobile && flutter pub get
+# 1. تفعيل دعم الويب (لو ناقص) + Dependencies
+RUN cd apps/mobile && flutter create . --platforms web && flutter pub get
 
 # 2. بناء Flutter Web
 RUN cd apps/mobile && flutter build web \
@@ -48,14 +48,3 @@ ENV PORT=8080
 EXPOSE 8080
 
 CMD ["/app/server"]
-RUN cd apps/mobile && flutter pub get
-RUN cd apps/mobile && flutter build web \
-      --release \
-      --no-tree-shake-icons
-
-RUN cd apps/mobile && flutter pub get
-
-RUN cd apps/mobile && flutter build web \
-      --release \
-      --no-tree-shake-icons
-
