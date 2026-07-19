@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:shelf_static/shelf_static.dart';
 import 'package:path/path.dart' as p;
 
 Future<HttpServer> run(Handler handler, InternetAddress ip, int port) {
