@@ -1,23 +1,22 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:server/composition/composition_root.dart';
 
-/// Root middleware: provides the composition root to every route and applies
-/// baseline security headers.
-///
-/// Authentication is deliberately NOT enforced here. Making the whole tree
-/// require a token would break the public `/health` probe (Roadmap ADR:
-/// `/health` stays public). Instead, `bearerAuth` is scoped to the protected
-/// subtrees that opt in via their own `_middleware.dart` (see
-/// `routes/me/_middleware.dart`). The composition root — and therefore the
-/// `AuthenticateRequest` use-case those subtrees rely on — is provided here so
-/// it is available everywhere.
 Handler middleware(Handler handler) {
-  return handler
-      .use(requestLogger())
-      .use(_securityHeaders())
-      .use(
-        provider<Future<CompositionRoot>>((_) => CompositionRoot.instance()),
-      );
+  return (context) async {
+    // Serve static files without touching the database
+    final path = context.request.uri.path;
+    if (path == '/' || path.isEmpty) {
+      return handler(context);
+    }
+    return handler
+        .use(requestLogger())
+        .use(_securityHeaders())
+        .use(
+          provider<Future<CompositionRoot>>(
+            (_) => CompositionRoot.instance(),
+          ),
+        )(context);
+  };
 }
 
 Middleware _securityHeaders() {
