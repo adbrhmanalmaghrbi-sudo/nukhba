@@ -49,3 +49,15 @@ ENV PORT=8080
 EXPOSE 8080
 
 CMD ["/app/server"]
+RUN flutter pub get
+RUN flutter build web \
+      --release \
+      --no-tree-shake-icons \
+      -C apps/mobile
+
+RUN cd apps/mobile && flutter pub get
+
+RUN cd apps/mobile && flutter build web \
+      --release \
+      --no-tree-shake-icons
+
