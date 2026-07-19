@@ -12,6 +12,7 @@ Future<HttpServer> run(Handler handler, InternetAddress ip, int port) {
 
   final staticHandler = createStaticFileHandler(
     path: 'public',
+    defaultDocument: 'index.html',
   );
 
   final cascade = Cascade()
