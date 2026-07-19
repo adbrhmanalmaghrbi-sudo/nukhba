@@ -17,6 +17,7 @@ RUN cd apps/mobile && flutter build web \
 # 3. نسخ output لـpublic/ قبل dart_frog build
 RUN mkdir -p apps/server/public && \
     cp -r apps/mobile/build/web/. apps/server/public/
+RUN echo '--- PUBLIC DIR CONTENT ---' && ls -la apps/server/public/ | head -20
 
 # 4. بناء Dart Frog
 RUN dart pub global activate dart_frog_cli
