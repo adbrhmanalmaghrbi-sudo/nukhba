@@ -1,17 +1,26 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:path/path.dart' as p;
 
 Future<HttpServer> run(Handler handler, InternetAddress ip, int port) {
-  final publicDir = Directory('public');
+  // احسب مسار public نسبةً لموقع الملف التنفيذي، مش لمجلد العمل الحالي
+  final exeDir = p.dirname(Platform.resolvedExecutable);
+  final publicPath = p.join(exeDir, 'public');
+  final publicDir = Directory(publicPath);
 
-  // لو public/ مش موجودة أو فاضية، اشتغل API فقط بدون static handler
+  print('CWD: ${Directory.current.path}');
+  print('Executable dir: $exeDir');
+  print('Looking for public at: $publicPath');
+  print('public exists: ${publicDir.existsSync()}');
+
   if (!publicDir.existsSync() || publicDir.listSync().isEmpty) {
+    print('WARNING: public not found — running API-only mode');
     return serve(handler, ip, port);
   }
 
   final staticHandler = createStaticFileHandler(
-    path: 'public',
+    path: publicPath,
     defaultDocument: 'index.html',
   );
 
