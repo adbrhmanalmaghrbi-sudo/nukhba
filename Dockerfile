@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # 1. تفعيل دعم الويب (لو ناقص) + Dependencies
-RUN cd apps/mobile && flutter create . --platforms web && flutter pub get
+RUN cd apps/mobile && flutter create . --platforms web && flutter pub get && dart run build_runner build --delete-conflicting-outputs
 
 # 2. بناء Flutter Web
 RUN cd apps/mobile && flutter build web \
