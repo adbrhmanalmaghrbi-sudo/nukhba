@@ -7,13 +7,12 @@ WORKDIR /app
 COPY . .
 
 # 1. Dependencies للـmonorepo
-RUN flutter pub get
+RUN cd apps/mobile && flutter pub get
 
 # 2. بناء Flutter Web
-RUN flutter build web \
+RUN cd apps/mobile && flutter build web \
       --release \
-      --no-tree-shake-icons \
-      -C apps/mobile
+      --no-tree-shake-icons
 
 # 3. نسخ output لـpublic/ قبل dart_frog build
 RUN mkdir -p apps/server/public && \
@@ -49,11 +48,10 @@ ENV PORT=8080
 EXPOSE 8080
 
 CMD ["/app/server"]
-RUN flutter pub get
-RUN flutter build web \
+RUN cd apps/mobile && flutter pub get
+RUN cd apps/mobile && flutter build web \
       --release \
-      --no-tree-shake-icons \
-      -C apps/mobile
+      --no-tree-shake-icons
 
 RUN cd apps/mobile && flutter pub get
 
