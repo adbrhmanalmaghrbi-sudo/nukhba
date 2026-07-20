@@ -21,14 +21,21 @@ List<String> _allowedOrigins() {
       'http://localhost:*',
     ];
   }
-  return raw.split(',').map((o) => o.trim()).where((o) => o.isNotEmpty).toList();
+  return raw
+      .split(',')
+      .map((o) => o.trim())
+      .where((o) => o.isNotEmpty)
+      .toList();
 }
 
 bool _originAllowed(String? origin, List<String> allowed) {
   if (origin == null) return false;
   for (final pattern in allowed) {
     if (pattern.endsWith(':*')) {
-      final prefix = pattern.substring(0, pattern.length - 1); // keep trailing ':'
+      final prefix = pattern.substring(
+        0,
+        pattern.length - 1,
+      ); // keep trailing ':'
       if (origin.startsWith(prefix)) return true;
     } else if (pattern == origin) {
       return true;
@@ -43,7 +50,8 @@ Handler middleware(Handler handler) {
   return (context) async {
     final origin = context.request.headers['origin'];
     final corsHeaders = <String, Object>{
-      if (_originAllowed(origin, allowed)) 'Access-Control-Allow-Origin': origin!,
+      if (_originAllowed(origin, allowed))
+        'Access-Control-Allow-Origin': origin!,
       'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       'Access-Control-Max-Age': '86400',

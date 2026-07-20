@@ -5,9 +5,7 @@ import 'package:dart_frog/dart_frog.dart';
 /// independently to GitHub Pages. `/` exists only as a human-friendly
 /// landing/sanity check; real health checks should use `/health`.
 Future<Response> onRequest(RequestContext context) async {
-  return Response.json(body: {
-    'service': 'nukhba-api',
-    'status': 'ok',
-    'health': '/health',
-  });
+  return Response.json(
+    body: {'service': 'nukhba-api', 'status': 'ok', 'health': '/health'},
+  );
 }

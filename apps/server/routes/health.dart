@@ -15,18 +15,18 @@ Future<Response> onRequest(RequestContext context) async {
     final result = await root.checkHealth();
     return switch (result) {
       Ok<HealthCheck>(:final value) => Response.json(
-          statusCode: value.status == HealthStatus.healthy
-              ? HttpStatus.ok
-              : HttpStatus.serviceUnavailable,
-          body: HealthResponseDto(
-            status: value.status.name,
-            databaseReachable: value.databaseReachable,
-          ).toJson(),
-        ),
+        statusCode: value.status == HealthStatus.healthy
+            ? HttpStatus.ok
+            : HttpStatus.serviceUnavailable,
+        body: HealthResponseDto(
+          status: value.status.name,
+          databaseReachable: value.databaseReachable,
+        ).toJson(),
+      ),
       Err<HealthCheck>(:final error) => Response.json(
-          statusCode: HttpStatus.serviceUnavailable,
-          body: {'error': error.code, 'message': error.message},
-        ),
+        statusCode: HttpStatus.serviceUnavailable,
+        body: {'error': error.code, 'message': error.message},
+      ),
     };
   } catch (e, st) {
     return Response.json(
