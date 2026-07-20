@@ -47,7 +47,9 @@ jobs:
 
       - name: Build web
         working-directory: apps/mobile
-        run: flutter build web --release --base-href /nukhba/
+        run: >-
+          flutter build web --release --base-href /nukhba/
+          --dart-define=NUKHBA_API_BASE_URL=${{ vars.NUKHBA_API_BASE_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
