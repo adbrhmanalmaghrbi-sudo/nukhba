@@ -5,7 +5,7 @@ import 'package:dart_frog/dart_frog.dart';
 /// Origins allowed to call this API from a browser.
 ///
 /// The frontend (Flutter Web) is hosted on GitHub Pages, a different origin
-/// from this Back4App-hosted API, so CORS headers are required for browser
+/// from this API (hosted on Google Cloud Run), so CORS headers are required for browser
 /// requests to succeed at all (server-to-server / non-browser clients are
 /// unaffected either way).
 ///
