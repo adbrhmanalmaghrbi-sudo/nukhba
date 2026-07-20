@@ -1,13 +1,4 @@
-# ─────────────────────────────────────────────────────────
-# Stage 1 — Build (Dart Frog API only)
-#
-# The Flutter Web frontend is built and deployed separately via
-# .github/workflows (GitHub Pages). This image no longer builds Flutter or
-# copies a `public/` directory — see ADR-007 (hosting is separated from the
-# app) and routes/_middleware.dart (CORS is now required precisely because
-# the frontend lives on a different origin).
-# ─────────────────────────────────────────────────────────
-FROM dart:stable AS build
+FROM ghcr.io/cirruslabs/flutter:3.44.0 AS build
 
 WORKDIR /app
 COPY . .
@@ -22,9 +13,6 @@ WORKDIR /app/apps/server/build
 RUN dart pub get && \
     dart compile exe bin/server.dart -o server
 
-# ─────────────────────────────────────────────────────────
-# Stage 2 — Runtime (minimal)
-# ─────────────────────────────────────────────────────────
 FROM debian:bookworm-slim
 
 RUN apt-get update && \
