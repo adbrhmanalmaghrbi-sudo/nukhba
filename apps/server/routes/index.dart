@@ -1,19 +1,13 @@
-import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import 'package:path/path.dart' as p;
 
+/// This server is an API-only backend (ADR-007: hosting is separated from
+/// the app). It no longer serves the Flutter Web build — that is deployed
+/// independently to GitHub Pages. `/` exists only as a human-friendly
+/// landing/sanity check; real health checks should use `/health`.
 Future<Response> onRequest(RequestContext context) async {
-  final execDir = p.dirname(Platform.resolvedExecutable);
-  final file = File(p.join(execDir, 'public', 'index.html'));
-  final exists = await file.exists();
-  final size = exists ? await file.length() : 0;
-  print('GET / → file: ${file.path}, exists: $exists, size: $size');
-  if (!exists) {
-    return Response(statusCode: 404, body: 'NOT FOUND: ${file.path}');
-  }
-  final bytes = await file.readAsBytes();
-  return Response.bytes(
-    body: bytes,
-    headers: {'content-type': 'text/html; charset=utf-8'},
-  );
+  return Response.json(body: {
+    'service': 'nukhba-api',
+    'status': 'ok',
+    'health': '/health',
+  });
 }
