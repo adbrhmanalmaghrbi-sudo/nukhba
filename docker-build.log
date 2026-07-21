@@ -1,0 +1,4 @@
+The program docker is not installed. Install it by executing:
+ pkg install docker, after running pkg install root-repo
+or
+ pkg install docker-cli

@@ -1,4 +1,3 @@
-import 'package:application/application.dart';
 import 'package:domain/domain.dart';
 import 'package:infrastructure/src/db/postgres_connection.dart';
 import 'package:infrastructure/src/ledger/postgres_ledger_repository.dart';

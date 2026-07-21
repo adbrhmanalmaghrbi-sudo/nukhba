@@ -15,7 +15,6 @@
 /// race against the autoDispose scheduler without it.
 library;
 
-import 'package:contracts/contracts.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/features/leaderboards/leaderboards_providers.dart';
 import 'package:shared/shared.dart';

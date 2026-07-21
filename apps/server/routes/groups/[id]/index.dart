@@ -80,7 +80,7 @@ Future<Response> _rename(RequestContext context, String id) async {
   return switch (result) {
     // Resolve the current member count for the renamed group via the member-
     // gated read (the caller is the owner, hence a member — the gate passes).
-    Ok<Group>() => _reReadForCount(root, principal, id, result as Ok<Group>),
+    Ok<Group>() => _reReadForCount(root, principal, id, result),
     Err<Group>(:final error) => errorResponse(error),
   };
 }

@@ -8,7 +8,6 @@ import '../competition/fakes.dart';
 import 'fake_prediction_repository.dart';
 
 const _userId = '11111111-1111-1111-1111-111111111111';
-const _otherUserId = '77777777-7777-7777-7777-777777777777';
 const _seasonId = '33333333-3333-3333-3333-333333333333';
 const _roundId = '44444444-4444-4444-4444-444444444444';
 const _participantId = '55555555-5555-5555-5555-555555555555';

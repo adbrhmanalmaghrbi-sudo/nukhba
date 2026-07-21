@@ -1,0 +1,63 @@
+name: Dart Analyze
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.0'
+          channel: 'stable'
+
+      - name: Get dependencies for all packages
+        run: |
+          cd packages/domain && dart pub get
+          cd ../application && dart pub get
+          cd ../infrastructure && dart pub get
+          cd ../contracts && dart pub get
+          cd ../api_client && dart pub get
+          cd ../shared && dart pub get
+          cd ../../apps/server && dart pub get
+          cd ../mobile && flutter pub get
+
+      - name: Generate code (build_runner)
+        run: |
+          cd packages/application && dart run build_runner build --delete-conflicting-outputs
+          cd ../../apps/server && dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run dart analyze
+        run: dart analyze --fatal-infos --fatal-warnings .
+
+      - name: Generate report
+        if: always()
+        run: |
+          mkdir -p docs/reviews
+          {
+            echo "# Build Verification Report"
+            echo ""
+            echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "Status: ${{ job.status }}"
+            echo ""
+            echo "## Step: dart analyze --fatal-infos --fatal-warnings ."
+            echo "Result: ${{ job.status }}"
+          } > docs/reviews/build-verification-report.md
+          cat docs/reviews/build-verification-report.md
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-verification-report
+          path: docs/reviews/build-verification-report.md

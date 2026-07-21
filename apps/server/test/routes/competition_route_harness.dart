@@ -21,6 +21,11 @@ import 'package:shared/shared.dart';
 const kCompetitionId = '11111111-1111-1111-1111-111111111111';
 const kSeasonId = '22222222-2222-2222-2222-222222222222';
 const kRoundId = '33333333-3333-3333-3333-333333333333';
+// A second, distinct round id — for tests that credit a participant across
+// two separate rounds (a single round_score entry is unique per
+// (participant, round); crediting the "same" round twice is a re-post and
+// is correctly deduped, not a second entry).
+const kRoundId2 = '34343434-3434-3434-3434-343434343434';
 const kFixtureId = '66666666-6666-6666-6666-666666666666';
 const kAdminId = '77777777-7777-7777-7777-777777777777';
 const kUserId = '88888888-8888-8888-8888-888888888888';

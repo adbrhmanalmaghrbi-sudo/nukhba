@@ -8,7 +8,6 @@
 /// off the provider's future (thrown, so the UI sees `AsyncError`).
 library;
 
-import 'package:contracts/contracts.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/features/competition/competition_providers.dart';
 import 'package:shared/shared.dart';

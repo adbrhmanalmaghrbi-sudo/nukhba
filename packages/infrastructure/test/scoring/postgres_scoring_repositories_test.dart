@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:application/application.dart';
 import 'package:domain/domain.dart';
 import 'package:infrastructure/src/db/postgres_connection.dart';
 import 'package:infrastructure/src/scoring/postgres_fixture_result_repository.dart';
@@ -101,8 +100,6 @@ _FakeConnection _fails() => _FakeConnection([
 ]);
 
 RoundId get _rId => (RoundId.tryParse(_roundId) as Ok<RoundId>).value;
-ParticipantId get _pId =>
-    (ParticipantId.tryParse(_participantId) as Ok<ParticipantId>).value;
 
 FixtureResult _result(String fixture, int home, int away) =>
     FixtureResult.fromStored(

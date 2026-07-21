@@ -363,7 +363,6 @@ void main() {
   group('GET /admin/participants/{id}/ledger', () {
     final participantId =
         (ParticipantId.tryParse(kParticipantId) as Ok<ParticipantId>).value;
-    final roundId = (RoundId.tryParse(kRoundId) as Ok<RoundId>).value;
     final at = DateTime.utc(2026, 7, 20, 9, 30);
 
     Participant participant() => Participant.fromStored(
@@ -374,15 +373,23 @@ void main() {
       joinedAt: DateTime.utc(2026, 7, 1),
     );
 
-    PointEntry credit(String entryId, int amount) =>
+    /// Pass a distinct [roundIdStr] when seeding more than one credit for the
+    /// same participant — a round_score entry is unique per (participant,
+    /// round), so two credits for the same round would dedupe to one (a
+    /// re-post), not add up.
+    PointEntry credit(
+      String entryId,
+      int amount, {
+      String roundIdStr = kRoundId,
+    }) =>
         (PointEntry.create(
                   id: (PointEntryId.tryParse(entryId) as Ok<PointEntryId>)
                       .value,
                   participantId: participantId,
-                  roundId: roundId,
+                  roundId: (RoundId.tryParse(roundIdStr) as Ok<RoundId>).value,
                   kind: EntryKind.roundScore,
                   amount: amount,
-                  sourceRef: 'round_score:$kRoundId:$kParticipantId',
+                  sourceRef: 'round_score:$roundIdStr:$kParticipantId',
                   occurredAt: at,
                 )
                 as Ok<PointEntry>)
@@ -449,7 +456,10 @@ void main() {
     test('an admin reads a participant ledger (200) and one audit entry is '
         'recorded', () async {
       final setup = await rootFor(
-        entries: [credit(kAuditEntryId, 4), credit(kAuditEntryId2, 3)],
+        entries: [
+          credit(kAuditEntryId, 4),
+          credit(kAuditEntryId2, 3, roundIdStr: kRoundId2),
+        ],
         // The credits reuse audit-id UUIDs purely as valid entry ids; the
         // participant/round are what matter.
       );
