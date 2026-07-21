@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:server/composition/composition_root.dart';
 
 /// Origins allowed to call this API from a browser.
 ///
@@ -44,8 +45,26 @@ bool _originAllowed(String? origin, List<String> allowed) {
   return false;
 }
 
+/// Global middleware applied to EVERY route (Dart Frog convention: a
+/// `_middleware.dart` at `routes/` roots the whole tree).
+///
+/// Wires TWO cross-cutting concerns, in order:
+///   1. The single process-wide [CompositionRoot] provider — every route,
+///      including `/health` (which sits at the tree root with no per-subtree
+///      middleware of its own), reads it via
+///      `context.read<Future<CompositionRoot>>()`. Without this registration
+///      that read throws (the defect this fixes). `CompositionRoot.instance()`
+///      caches the bootstrap Future, so this never opens more than one
+///      Postgres connection pool regardless of how many routes read it.
+///   2. CORS headers (unchanged from before — still short-circuits OPTIONS
+///      preflight before it ever reaches the composition-root-wrapped
+///      handler, since a preflight never needs application state).
 Handler middleware(Handler handler) {
   final allowed = _allowedOrigins();
+
+  final withCompositionRoot = handler.use(
+    provider<Future<CompositionRoot>>((_) => CompositionRoot.instance()),
+  );
 
   return (context) async {
     final origin = context.request.headers['origin'];
@@ -63,7 +82,7 @@ Handler middleware(Handler handler) {
       return Response(statusCode: 204, headers: corsHeaders);
     }
 
-    final response = await handler(context);
+    final response = await withCompositionRoot(context);
     return response.copyWith(headers: {...response.headers, ...corsHeaders});
   };
 }
