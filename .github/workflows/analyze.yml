@@ -5,19 +5,21 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
         with:
-          sdk: stable
+          flutter-version: '3.44.0'
+          channel: 'stable'
 
       - name: Get dependencies for all packages
         run: |
@@ -37,32 +39,24 @@ jobs:
 
       - name: Run dart analyze
         run: dart analyze --fatal-infos --fatal-warnings .
-        continue-on-error: false
 
       - name: Generate report
         if: always()
         run: |
           mkdir -p docs/reviews
-          cat > docs/reviews/build-verification-report.md << 'EOF'
-          # Build Verification Report
-          
-          **Date:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
-          **Status:** ✅ PASSED
-          
-          ## Commands Executed
-          
-          - dart pub get (all packages)
-          - dart run build_runner build --delete-conflicting-outputs
-          - dart analyze --fatal-infos --fatal-warnings .
-          
-          ## Result
-          
-          No issues found!
-          EOF
+          {
+            echo "# Build Verification Report"
+            echo ""
+            echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "Status: ${{ job.status }}"
+            echo ""
+            echo "## Step: dart analyze --fatal-infos --fatal-warnings ."
+            echo "Result: ${{ job.status }}"
+          } > docs/reviews/build-verification-report.md
           cat docs/reviews/build-verification-report.md
 
       - name: Upload report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: build-verification-report
