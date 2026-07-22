@@ -74,5 +74,7 @@ final class AppError {
   int get hashCode => Object.hash(kind, code, message);
 
   @override
-  String toString() => 'AppError(${kind.name}: $code — $message)';
+  String toString() => cause == null
+      ? 'AppError(${kind.name}: $code — $message)'
+      : 'AppError(${kind.name}: $code — $message) caused by: $cause';
 }

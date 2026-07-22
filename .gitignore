@@ -25,3 +25,5 @@ pubspec_overrides.yaml
 .vscode/
 *.iml
 .DS_Store
+docker-build.log
+*.log
