@@ -45,7 +45,7 @@ final class PostgresUserAdminRepository implements UserAdminRepository {
   // --------------------------------------------------------------------------
 
   static const String _findSql = '''
-SELECT id, email, role, status
+SELECT id, email, role::text, status::text
 FROM identity.users
 WHERE id = @id
 ''';
@@ -79,7 +79,7 @@ UPDATE identity.users
 SET status = @status,
     updated_at = now()
 WHERE id = @id
-RETURNING id, email, role, status
+RETURNING id, email, role::text, status::text
 ''';
 
   @override
