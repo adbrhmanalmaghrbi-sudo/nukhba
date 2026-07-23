@@ -25,7 +25,7 @@ VALUES (@id, @email, @role, 'active')
 ON CONFLICT (id) DO UPDATE
   SET email = EXCLUDED.email,
       updated_at = now()
-RETURNING id, email, role, status
+RETURNING id, email, role::text, status::text
 ''';
 
   @override

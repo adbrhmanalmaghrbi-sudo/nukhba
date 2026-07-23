@@ -103,7 +103,7 @@ RETURNING id
   // --------------------------------------------------------------------------
 
   static const String _listSql = '''
-SELECT id, recipient_id, kind, round_id, group_id, actor_user_id, read_at,
+SELECT id, recipient_id, kind::text, round_id, group_id, actor_user_id, read_at,
        created_at
 FROM notification.notifications
 WHERE recipient_id = @recipient_id
@@ -131,7 +131,7 @@ LIMIT @limit
   // --------------------------------------------------------------------------
 
   static const String _findSql = '''
-SELECT id, recipient_id, kind, round_id, group_id, actor_user_id, read_at,
+SELECT id, recipient_id, kind::text, round_id, group_id, actor_user_id, read_at,
        created_at
 FROM notification.notifications
 WHERE id = @id AND recipient_id = @recipient_id

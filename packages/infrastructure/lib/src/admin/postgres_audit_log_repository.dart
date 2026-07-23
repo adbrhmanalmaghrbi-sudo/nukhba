@@ -89,7 +89,7 @@ RETURNING id
   // --------------------------------------------------------------------------
 
   static const String _listSql = '''
-SELECT id, actor_id, action, target_ref, reason, occurred_at
+SELECT id, actor_id, action::text, target_ref, reason, occurred_at
 FROM admin.audit_log
 ORDER BY occurred_at DESC, id DESC
 LIMIT @limit

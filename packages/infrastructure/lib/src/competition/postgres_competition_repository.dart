@@ -75,7 +75,7 @@ VALUES (@id, @name, @format::competition.format_type,
   }
 
   static const String _selectCompetitionSql = '''
-SELECT id, name, format, visibility
+SELECT id, name, format::text, visibility::text
 FROM competition.competitions
 WHERE id = @id
 ''';
@@ -106,7 +106,7 @@ WHERE id = @id
   // migration's `competitions_select_public` RLS backstop). A read path never
   // leaks a raw invariant: a corrupt row maps to transient `row_corrupt`.
   static const String _listCompetitionsSql = '''
-SELECT id, name, format, visibility
+SELECT id, name, format::text, visibility::text
 FROM competition.competitions
 WHERE visibility = 'public'::competition.visibility
 ORDER BY name ASC, id ASC
@@ -338,7 +338,7 @@ VALUES
   }
 
   static const String _selectRoundSql = '''
-SELECT id, season_id, sequence, prediction_deadline, status,
+SELECT id, season_id, sequence, prediction_deadline, status::text,
        ruleset_snapshot, ruleset_version
 FROM competition.rounds
 WHERE id = @id
@@ -369,7 +369,7 @@ WHERE id = @id
   // oracle) — the SELECT simply returns no rows. Reuses `_mapRound` so a
   // corrupt row maps to transient `row_corrupt`, exactly as `findRound` does.
   static const String _listSeasonRoundsSql = '''
-SELECT id, season_id, sequence, prediction_deadline, status,
+SELECT id, season_id, sequence, prediction_deadline, status::text,
        ruleset_snapshot, ruleset_version
 FROM competition.rounds
 WHERE season_id = @season_id
@@ -640,7 +640,7 @@ VALUES (@id, @season_id, @user_id,
   }
 
   static const String _selectParticipantSql = '''
-SELECT id, season_id, user_id, status, joined_at
+SELECT id, season_id, user_id, status::text, joined_at
 FROM competition.participants
 WHERE season_id = @season_id AND user_id = @user_id
 ''';

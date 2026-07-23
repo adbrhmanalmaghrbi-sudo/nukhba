@@ -29,7 +29,7 @@ final class PostgresParticipantReader implements ParticipantReader {
   final PostgresConnection _connection;
 
   static const String _selectByIdSql = '''
-SELECT id, season_id, user_id, status, joined_at
+SELECT id, season_id, user_id, status::text, joined_at
 FROM competition.participants
 WHERE id = @id
 ''';

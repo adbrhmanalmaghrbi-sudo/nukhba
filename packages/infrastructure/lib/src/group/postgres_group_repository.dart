@@ -193,13 +193,13 @@ WHERE id = @id
   // --------------------------------------------------------------------------
 
   static const String _selectMembershipSql = '''
-SELECT id, group_id, user_id, role, joined_at
+SELECT id, group_id, user_id, role::text, joined_at
 FROM "group".group_memberships
 WHERE group_id = @group_id AND user_id = @user_id
 ''';
 
   static const String _listMembershipsSql = '''
-SELECT id, group_id, user_id, role, joined_at
+SELECT id, group_id, user_id, role::text, joined_at
 FROM "group".group_memberships
 WHERE group_id = @group_id
 ORDER BY joined_at ASC, id ASC
