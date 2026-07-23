@@ -1,10 +1,21 @@
-NUKHBA_PG_HOST=aws-0-eu-central-1.pooler.supabase.com
-NUKHBA_PG_PORT=5432
-NUKHBA_PG_DATABASE=postgres
-NUKHBA_PG_USERNAME=postgres.btuvfyifankxjsynfzhj
-NUKHBA_PG_PASSWORD=rhm@v*_6UPUfJit
-NUKHBA_PG_SSL=require
-NUKHBA_SUPABASE_PROJECT_REF=btuvfyifankxjsynfzhj
-NUKHBA_SUPABASE_JWT_AUD=authenticated
-NUKHBA_ENV=production
-NUKHBA_PORT=8080
+FROM ghcr.io/cirruslabs/flutter:3.44.0 AS build
+WORKDIR /app
+COPY . .
+RUN dart pub global activate dart_frog_cli
+ENV PATH="$PATH:/root/.pub-cache/bin"
+WORKDIR /app/apps/server
+RUN dart_frog build
+RUN mkdir -p public
+WORKDIR /app/apps/server/build
+RUN dart pub get && \
+    dart compile exe bin/server.dart -o server
+    FROM debian:bookworm-slim
+    RUN apt-get update && \
+        apt-get install -y --no-install-recommends ca-certificates && \
+            rm -rf /var/lib/apt/lists/*
+            WORKDIR /app
+            COPY --from=build /app/apps/server/build/server ./server
+            COPY --from=build /app/apps/server/public        ./public
+            ENV PORT=8080
+            EXPOSE 8080
+            CMD ["/app/server"]
