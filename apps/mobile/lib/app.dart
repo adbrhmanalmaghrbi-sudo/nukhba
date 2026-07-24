@@ -6,10 +6,14 @@
 /// table is declared here — v1 routing is the session gate's job (see
 /// `session_gate.dart`); URL-addressable routes arrive with the later
 /// multi-screen slices.
+///
+/// The visual identity is centralized in [AppTheme] (the "Midnight Pitch"
+/// design system); every screen inherits it through Theme.of(context).
 library;
 
 import 'package:flutter/material.dart';
 
+import 'core/theme/app_theme.dart';
 import 'features/auth/session_gate.dart';
 
 /// The Nukhba client application shell.
@@ -21,10 +25,8 @@ class NukhbaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Nukhba',
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0xFF1B5E20),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.dark,
       home: const SessionGate(),
     );
   }
